@@ -8,7 +8,7 @@ window.REARDECK = {
   // e.g. "https://github.com/YOURNAME/reardeck/releases/latest/download/RearDeck.apk"
   apkUrl: "https://github.com/Matrixology/backdisplay/releases/latest/download/BackDisplay.apk",
   apkSize: "50 MB",                 // e.g. "28 MB"
-  apkSha256: "3268c0412fa7e7c174ebf9b67e4fff17e962f3529c2bc481b5ea3e9e804726cf",               // optional: lets careful users check the file
+  apkSha256: "554598ed3aa8c17d0e7a15f24687f8658d4edead5b7ecbeae6f171db0ad6c059",               // optional: lets careful users check the file
   playUrl: "",
   email: "matrixology@gmail.com",
   privacyUrl: "privacy.html",
