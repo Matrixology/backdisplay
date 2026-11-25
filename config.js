@@ -10,11 +10,11 @@ window.REARDECK = {
   apkSize: "50 MB",                 // e.g. "28 MB"
   apkSha256: "3268c0412fa7e7c174ebf9b67e4fff17e962f3529c2bc481b5ea3e9e804726cf",               // optional: lets careful users check the file
   playUrl: "",
-  email: "ezilifeco@gmail.com",
+  email: "matrixology@gmail.com",
   privacyUrl: "privacy.html",
 
   // ---- Support options (each card shows only when it has a value) ----
-  binancePayId: "",            // your Binance Pay ID (numbers), from Binance → Pay → Receive
+  binancePayId: "155112876",            // your Binance Pay ID (numbers), from Binance → Pay → Receive
   binanceQr: "",               // optional: a QR image you saved from Binance, e.g. "img/binance-qr.png"
   usdt: [                      // crypto addresses; delete the lines you don't use
     { network: "TRC20 (Tron)", address: "" },
