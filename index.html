@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BackDisplay · your Xiaomi rear screen, finally useful</title>
+<meta name="description" content="BackDisplay puts clocks, notifications, calls, widgets and your apps on the rear screen of the Xiaomi 17 Pro, 17 Pro Max, 18 Pro and 18 Pro Max. Free download, no ads, no tracking.">
+<meta property="og:title" content="BackDisplay for the Xiaomi rear screen">
+<meta property="og:description" content="Clocks, notifications, calls, widgets and apps on the back of your Xiaomi 17/18 Pro. Free, no ads, no tracking.">
+<meta property="og:image" content="img/shot-1.png">
+<meta name="theme-color" content="#06302c">
+<link rel="icon" href="img/icon.png">
+<style>
+:root{
+  --ink:#15282a; --ink2:#55696b; --line:#dde8e6; --bg:#f5f8f7; --card:#fff;
+  --brand:#0f9d8a; --brand2:#f29d38; --deep:#06302c; --ok:#14996b;
+  --r:20px; --shadow:0 1px 2px rgba(10,60,55,.06),0 8px 30px rgba(10,60,55,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--brand);text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.15;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(28px,4vw,40px)}
+.lead{color:var(--ink2);font-size:18px;max-width:640px}
+section{padding:72px 0}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+
+/* header */
+header{position:sticky;top:0;z-index:10;background:rgba(245,248,247,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:14px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--ink)}
+.logo img{width:36px;height:36px;border-radius:10px}
+nav{margin-left:auto;display:flex;gap:22px;font-size:15px}
+nav a{color:var(--ink2)} nav a:hover{color:var(--ink)}
+@media(max-width:720px){nav a:not(.btn){display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;font-weight:650;border:0;cursor:pointer;font-size:15px;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 8px 24px rgba(15,157,138,.35)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:8px 16px;font-size:14px}
+.btn svg{width:18px;height:18px}
+
+/* hero */
+.hero{padding:64px 0 40px;background:radial-gradient(900px 500px at 85% -10%,#cdeee7 0,transparent 60%),radial-gradient(700px 400px at -10% 30%,#ffecd6 0,transparent 60%)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:850}
+.hero h1 span{background:linear-gradient(135deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin:18px 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.meta{margin-top:16px;color:var(--ink2);font-size:14px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink2)}
+.pill b{color:var(--ok)}
+.hero-shot{border-radius:24px;box-shadow:0 30px 80px rgba(10,60,55,.22);overflow:hidden;background:#fff}
+@media(max-width:880px){.hero .wrap{grid-template-columns:1fr}}
+
+/* features */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:36px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.card h3{font-size:18px;margin:12px 0 6px}
+.card p{margin:0;color:var(--ink2);font-size:15px}
+.ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#dcf3ee,#ffefdc)}
+
+/* gallery */
+.gallery{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:30px 20px 10px;margin:0 -20px}
+.gallery img{width:min(620px,82vw);flex:none;border-radius:18px;scroll-snap-align:center;box-shadow:var(--shadow);background:#fff}
+
+/* steps */
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:36px}
+.step{position:relative;padding-top:56px}
+.step::before{counter-increment:s;content:counter(s);position:absolute;top:20px;left:22px;width:28px;height:28px;border-radius:50%;background:var(--deep);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+
+/* support */
+.support{background:linear-gradient(160deg,var(--deep),#0b5e55 60%,#0f8c7c);color:#fff}
+.support .lead{color:#cdeae5}
+.support .eyebrow{color:#9fe0d4}
+.support .card{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);box-shadow:none;color:#fff}
+.support .card p,.support .card small{color:#cdeae5}
+.field{margin-top:12px}
+.field label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#9fe0d4}
+.copy{display:flex;align-items:center;gap:8px;margin-top:4px;background:rgba(0,0,0,.22);border-radius:12px;padding:10px 12px}
+.copy code{flex:1;font:14px/1.4 ui-monospace,Consolas,monospace;word-break:break-all;color:#fff}
+.copy button{flex:none;background:#fff;color:var(--deep);border:0;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;font-size:13px}
+.qr{width:160px;border-radius:12px;margin-top:12px;background:#fff;padding:8px}
+.warn{font-size:13px;color:#ffd58a;margin-top:10px}
+.support .btn.ghost{background:#fff}
+.support-empty{opacity:.75}
+
+/* faq */
+details{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-top:12px}
+summary{cursor:pointer;font-weight:650;list-style:none}
+summary::after{content:"+";float:right;color:var(--brand);font-weight:800}
+details[open] summary::after{content:"–"}
+details p{color:var(--ink2);margin:10px 0 0}
+
+footer{padding:40px 0;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center}
+footer .logo{font-size:16px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;transition:transform .25s;z-index:20}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#"><img src="img/icon.png" alt="">BackDisplay</a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#support">Support</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn primary small" href="#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="download">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">For Xiaomi 17 Pro · 17 Pro Max · 18 Pro · 18 Pro Max</div>
+      <h1 style="margin-top:14px">Your rear screen, <span>finally useful.</span></h1>
+      <p class="lead">Clocks, notifications, calls, widgets and your own apps on the back of the phone. Free to download, with no ads and no tracking. If it helps you, you can support it.</p>
+      <div class="cta">
+        <a class="btn primary" id="apk" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
+          Download APK
+        </a>
+        <a class="btn ghost" id="play" href="#">Get it on Google Play</a>
+        <a class="btn ghost" href="#support">Support the app</a>
+      </div>
+      <div class="meta" id="apkmeta"></div>
+      <div class="pills">
+        <span class="pill"><b>✓</b> No ads</span>
+        <span class="pill"><b>✓</b> No account</span>
+        <span class="pill"><b>✓</b> No data collected</span>
+        <span class="pill"><b>✓</b> 7 languages</span>
+      </div>
+    </div>
+    <img class="hero-shot" src="img/shot-1.png" alt="BackDisplay clock on the rear screen">
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="eyebrow">On the back</div>
+    <h2 style="margin-top:8px">Everything you need, without flipping the phone</h2>
+    <div class="grid">
+      <div class="card"><div class="ico">🕘</div><h3>Clocks and always-on</h3><p>Digital and analog faces, up to three world clocks, weather, battery and an always-on page.</p></div>
+      <div class="card"><div class="ico">📞</div><h3>Calls from the back</h3><p>Answer or decline phone and WhatsApp calls, see which app is calling, and use speaker or hang up.</p></div>
+      <div class="card"><div class="ico">🔔</div><h3>Notifications</h3><p>New messages light up the rear, then it goes back to sleep. Show them only when the phone isn't in use, if you like.</p></div>
+      <div class="card"><div class="ico">📱</div><h3>Your apps on the rear</h3><p>Open any app in its own window on the back, with its own size and brightness. The keyboard works too.</p></div>
+      <div class="card"><div class="ico">⏰</div><h3>Reminders</h3><p>Share anything from the front screen to the rear as a reminder, once or repeating, with Snooze and Done.</p></div>
+      <div class="card"><div class="ico">🔋</div><h3>Battery and device</h3><p>Battery health, a heat warning, memory and storage, and a charging animation when you plug in.</p></div>
+      <div class="card"><div class="ico">✈️</div><h3>Widgets</h3><p>Quick toggles, flights, stocks, crypto, weather and IP cameras on swipeable pages.</p></div>
+      <div class="card"><div class="ico">👀</div><h3>Face wake and pocket mode</h3><p>The rear wakes when you look at it and stays dark in your pocket or face-down. All on the phone.</p></div>
+      <div class="card"><div class="ico">⚡</div><h3>HyperOS push fix</h3><p>On-time WhatsApp, Gmail and Telegram notifications on China HyperOS, without root.</p></div>
+    </div>
+    <div class="gallery" aria-label="Screenshots">
+      <img src="img/shot-2.png" alt="Screenshot" loading="lazy">
+      <img src="img/shot-3.png" alt="Screenshot" loading="lazy">
+      <img src="img/shot-4.png" alt="Screenshot" loading="lazy">
+      <img src="img/shot-5.png" alt="Screenshot" loading="lazy">
+      <img src="img/shot-6.png" alt="Screenshot" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="install" style="background:#fff;border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="eyebrow">Install</div>
+    <h2 style="margin-top:8px">Up and running in about two minutes</h2>
+    <div class="steps">
+      <div class="card step"><h3>Download the APK</h3><p>Tap Download APK above. If Android asks, allow your browser to install apps.</p></div>
+      <div class="card step"><h3>Install Shizuku</h3><p>Shizuku is free on Google Play. BackDisplay uses it to draw on the rear screen.</p></div>
+      <div class="card step"><h3>Follow the guide</h3><p>Open BackDisplay. Its guide starts Shizuku and asks for the few permissions it needs.</p></div>
+      <div class="card step"><h3>Turn the phone over</h3><p>Pick a clock and a background, and add the apps and widgets you want on the back.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="support" id="support">
+  <div class="wrap">
+    <div class="eyebrow">Support</div>
+    <h2 style="margin-top:8px">Free to use. Kept alive by people like you.</h2>
+    <p class="lead" style="margin-top:14px">BackDisplay is made by one developer. If it makes your phone better, any amount helps pay for new features and fixes after HyperOS updates.</p>
+    <div class="grid" id="ways"></div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">FAQ</div>
+    <h2 style="margin-top:8px">Questions</h2>
+    <details><summary>Which phones does it work on?</summary><p>Xiaomi 17 Pro, 17 Pro Max, 18 Pro and 18 Pro Max on HyperOS. On phones without a rear screen it does nothing.</p></details>
+    <details><summary>Why does it need Shizuku?</summary><p>Android doesn't let normal apps draw on the rear screen. Shizuku gives BackDisplay that access without root. BackDisplay works only while Shizuku is running, and a system update can change what is allowed.</p></details>
+    <details><summary>How do I update?</summary><p>Come back here and download the new APK. It installs over the old one and keeps your settings.</p></details>
+    <details><summary>Is it safe? What data does it collect?</summary><p>None. No account, no ads, no analytics. Face wake runs on the phone and nothing leaves it. <a id="privacy" href="#">Privacy policy</a>.</p></details>
+    <details><summary>Is the app made by Xiaomi?</summary><p>No. BackDisplay is an independent app and is not affiliated with Xiaomi, Google or Shizuku.</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="logo"><img src="img/icon.png" alt="" style="width:28px;height:28px;border-radius:8px">BackDisplay</span>
+    <a id="mail" href="#"></a>
+    <a id="privacy2" href="#">Privacy</a>
+    <span>Not affiliated with Xiaomi, Google or Shizuku. Xiaomi and HyperOS are trademarks of their owners.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Copied</div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var c = window.REARDECK || {};
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (m) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]; }); }
+
+  $("apk").href = c.apkUrl || "#";
+  $("play").href = c.playUrl || "#";
+  if (!c.playUrl) $("play").style.display = "none";
+  $("apkmeta").textContent = ["Version " + (c.version || ""), c.apkSize, "Android 14+"].filter(Boolean).join(" · ")
+    + (c.apkSha256 ? "  ·  SHA-256 " + c.apkSha256.slice(0, 16) + "…" : "");
+  ["privacy", "privacy2"].forEach(function (id) { $(id).href = c.privacyUrl || "#"; });
+  $("mail").href = "mailto:" + (c.email || ""); $("mail").textContent = c.email || "";
+
+  function copyRow(label, value) {
+    return '<div class="field"><label>' + esc(label) + '</label><div class="copy"><code>' + esc(value) +
+      '</code><button data-copy="' + esc(value) + '">Copy</button></div></div>';
+  }
+  var cards = [];
+  function card(icon, title, text, inner) {
+    cards.push('<div class="card"><div class="ico">' + icon + '</div><h3>' + esc(title) + '</h3><p>' + esc(text) + '</p>' + inner + '</div>');
+  }
+
+  if (c.binancePayId || c.binanceQr) {
+    card("🟡", "Binance Pay", "Send any amount, free and instant, from the Binance app: Pay → Send → Binance ID.",
+      (c.binancePayId ? copyRow("Binance Pay ID", c.binancePayId) : "") +
+      (c.binanceQr ? '<img class="qr" src="' + esc(c.binanceQr) + '" alt="Binance Pay QR code">' : ""));
+  }
+  var usdt = (c.usdt || []).filter(function (u) { return u.address; });
+  if (usdt.length) {
+    card("💠", "USDT (crypto)", "From any exchange or wallet. Send only USDT, on the network shown.",
+      usdt.map(function (u) { return copyRow(u.network, u.address); }).join("") +
+      '<div class="warn">Sending on the wrong network loses the coins.</div>');
+  }
+  var b = c.bank || {};
+  if (b.iban || b.raastId) {
+    card("🏦", b.title || "Bank transfer (Pakistan)", "From any Pakistani bank app, by IBFT or Raast.",
+      (b.accountName ? copyRow("Account title", b.accountName) : "") +
+      (b.bankName ? copyRow("Bank", b.bankName) : "") +
+      (b.iban ? copyRow("IBAN", b.iban) : "") +
+      (b.raastId ? copyRow("Raast ID", b.raastId) : ""));
+  }
+  var w = (c.wallets || []).filter(function (x) { return x.number; });
+  if (w.length) {
+    card("📲", "Mobile wallets", "JazzCash, Easypaisa and other wallets in Pakistan.",
+      w.map(function (x) { return copyRow(x.name + (x.holder ? " · " + x.holder : ""), x.number); }).join(""));
+  }
+  if (c.cardUrl || c.membershipUrl) {
+    card("💳", "Card or monthly", "Visa or Mastercard from any country.",
+      '<div class="cta" style="margin-top:14px">' +
+      (c.cardUrl ? '<a class="btn ghost small" href="' + esc(c.cardUrl) + '" target="_blank" rel="noopener">' + esc(c.cardLabel || "Pay by card") + '</a>' : "") +
+      (c.membershipUrl ? '<a class="btn ghost small" href="' + esc(c.membershipUrl) + '" target="_blank" rel="noopener">' + esc(c.membershipLabel || "Monthly support") + '</a>' : "") +
+      '</div>');
+  }
+  if (c.playUrl) {
+    card("▶️", "Buy Pro on Google Play", "Paying through Google Play also supports the app, and gets you automatic updates.",
+      '<div class="cta" style="margin-top:14px"><a class="btn ghost small" href="' + esc(c.playUrl) + '" target="_blank" rel="noopener">Open Google Play</a></div>');
+  }
+  $("ways").innerHTML = cards.join("") ||
+    '<div class="card support-empty"><p>Support options are coming soon.</p></div>';
+
+  var toast = $("toast"), t;
+  document.addEventListener("click", function (e) {
+    var v = e.target.getAttribute && e.target.getAttribute("data-copy");
+    if (!v) return;
+    navigator.clipboard.writeText(v).then(function () {
+      toast.classList.add("show"); clearTimeout(t);
+      t = setTimeout(function () { toast.classList.remove("show"); }, 1400);
+    });
+  });
+})();
+</script>
+</body>
+</html>
