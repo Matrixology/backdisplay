@@ -94,20 +94,15 @@ Android 14 or newer, HyperOS. On phones without a rear screen the app does nothi
 ## Install
 
 1. **Download** [`BackDisplay.apk`](https://github.com/Matrixology/backdisplay/releases/latest/download/BackDisplay.apk) on the phone. If Android asks, allow your browser to install apps.
-2. **Install Shizuku if you're on stock HyperOS.** [Shizuku](https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api) is free on Google Play. On **xiaomi.eu** and **ZKOS** ROMs you can skip this step (see below).
-3. **Open BackDisplay and follow its guide.** It checks your ROM, helps you start Shizuku if it's needed, and asks for the few permissions it uses (notifications, calls, microphone, camera, display over apps, battery).
+2. **Install Shizuku.** [Shizuku](https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api) is free on Google Play.
+3. **Open BackDisplay and follow its guide.** It helps you start Shizuku and asks for the few permissions it uses (notifications, calls, microphone, camera, display over apps, battery).
 4. **Turn the phone over.** Pick a clock and a background, and add the apps and widgets you want on the back.
 
-### Do I need Shizuku?
+### Why Shizuku?
 
-| ROM | Shizuku |
-|---|---|
-| Stock HyperOS (China / Global) | **Required.** HyperOS only lets system-level tools put apps on the rear screen. Shizuku gives BackDisplay that access without root. |
-| xiaomi.eu, ZKOS | **Optional.** The ROM opens apps on the rear by itself. Shizuku adds extras such as pausing Xiaomi's own rear app and App Lock handling. |
+HyperOS doesn't let normal apps put other apps on the rear screen or pause Xiaomi's own rear app, which otherwise keeps taking the screen back. Shizuku gives BackDisplay that access without root. It's needed on **every ROM**, including xiaomi.eu and ZKOS.
 
-BackDisplay detects the ROM by itself. If it guesses wrong, use the switch **"Rear screen works without Shizuku"** on its Home screen.
-
-On stock HyperOS, Shizuku has to be started again after every reboot: open Shizuku and tap **Start** (via Wireless debugging). Pairing is only needed once.
+Shizuku has to be started again after every reboot: open Shizuku and tap **Start** (via Wireless debugging). Pairing is only needed once.
 
 ### Updating
 
@@ -124,8 +119,8 @@ sha256sum BackDisplay.apk                      # Linux / macOS
 
 ## Troubleshooting
 
-- **Nothing shows on the rear screen (stock HyperOS):** Shizuku isn't running. Open Shizuku and tap Start, then reopen BackDisplay.
-- **Xiaomi's own rear screen keeps coming back:** on the Home screen, pause "Xiaomi rear app" (needs Shizuku; nothing is deleted, and you can restore it with one tap).
+- **Nothing shows on the rear screen:** Shizuku isn't running. Open Shizuku and tap Start, then reopen BackDisplay.
+- **Xiaomi's own rear screen keeps coming back:** on the Home screen, pause "Xiaomi rear app" (nothing is deleted, and you can restore it with one tap).
 - **Late notifications on China HyperOS:** use the HyperOS push fix in the app.
 - **After a HyperOS update something stopped working:** a system update can change what is allowed. Check for a new BackDisplay release. Turning off automatic HyperOS updates avoids surprises.
 - **Something else:** in the app, tap **Report a problem**. Your email app opens with a short technical log; nothing is sent until you press Send.
