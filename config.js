@@ -3,12 +3,12 @@
  * Leave a value as "" and its button or card is hidden from the page.
  */
 window.REARDECK = {
-  version: "1.5.0",
+  version: "1.5.1",
   // Where the APK is downloaded from. A GitHub Release link is best (free, no size limit),
   // e.g. "https://github.com/YOURNAME/reardeck/releases/latest/download/RearDeck.apk"
   apkUrl: "https://github.com/Matrixology/backdisplay/releases/latest/download/BackDisplay.apk",
   apkSize: "50 MB",                 // e.g. "28 MB"
-  apkSha256: "554598ed3aa8c17d0e7a15f24687f8658d4edead5b7ecbeae6f171db0ad6c059",               // optional: lets careful users check the file
+  apkSha256: "e62689746d736d3688e20f449adfa269a8d803c23c8b4e1c1764265c0e32f228",               // optional: lets careful users check the file
   playUrl: "",
   email: "matrixology@gmail.com",
   privacyUrl: "privacy.html",
@@ -27,7 +27,7 @@ window.REARDECK = {
     { name: "JazzCash", number: "", holder: "" },
     { name: "Easypaisa", number: "", holder: "" },
   ],
-  cardUrl: "",                 // card payments for anyone, e.g. a Gumroad "pay what you want" link
+  cardUrl: "https://matrixologist.gumroad.com/l/backdisplay", // card payments for anyone, e.g. a Gumroad "pay what you want" link
   cardLabel: "Pay by card",
   membershipUrl: "",           // e.g. a Patreon page
   membershipLabel: "Monthly support",
