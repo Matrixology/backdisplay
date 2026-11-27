@@ -30,6 +30,7 @@
 
 **Clocks and always-on**
 - Digital and analog clock faces, up to three world clocks
+- Always-on clock with a colour border: 13 colours and 8 gradients
 - Weather with warnings, battery level and an always-on page
 - Moving and still backgrounds
 
