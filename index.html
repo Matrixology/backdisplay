@@ -215,7 +215,7 @@ body.lock{overflow:hidden}
     <details><summary>Which phones does it work on?</summary><p>Xiaomi 17 Pro, 17 Pro Max, 18 Pro and 18 Pro Max on HyperOS. On phones without a rear screen it does nothing.</p></details>
     <details><summary>Why does it need Shizuku?</summary><p>HyperOS doesn't let normal apps put other apps on the rear screen or pause Xiaomi's own rear app. Shizuku gives BackDisplay that access without root. It's needed on every ROM, including xiaomi.eu and ZKOS. BackDisplay works only while Shizuku is running, and a system update can change what is allowed.</p></details>
     <details><summary>How do I update?</summary><p>Come back here and download the new APK. It installs over the old one and keeps your settings.</p></details>
-    <details><summary>Is it safe? What data does it collect?</summary><p>None. No account, no ads, no analytics. Face wake runs on the phone and nothing leaves it. <a id="privacy" href="#">Privacy policy</a>.</p></details>
+    <details><summary>Is it safe? What data does it collect?</summary><p>The app collects none: no account, no ads, no analytics. (This website only counts visits, without cookies or personal data.) Face wake runs on the phone and nothing leaves it. <a id="privacy" href="#">Privacy policy</a>.</p></details>
     <details><summary>Is the app made by Xiaomi?</summary><p>No. BackDisplay is an independent app and is not affiliated with Xiaomi, Google or Shizuku.</p></details>
   </div>
 </section>
@@ -319,13 +319,32 @@ body.lock{overflow:hidden}
   var modal = $("dlmodal");
   function openDl(e) { if (e) e.preventDefault(); modal.classList.add("open"); document.body.classList.add("lock"); $("dlclose").focus(); }
   function closeDl() { modal.classList.remove("open"); document.body.classList.remove("lock"); }
-  $("apk").addEventListener("click", openDl);
-  $("navdl").addEventListener("click", openDl);
+  // Visitor counting (GoatCounter: no cookies, no personal data), only when config.js has a code.
+  function track(path, title) {
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: path, title: title, event: true });
+  }
+  if (c.goatcounter) {
+    var gc = document.createElement("script");
+    gc.async = true;
+    gc.src = "https://gc.zgo.at/count.js";
+    gc.setAttribute("data-goatcounter", "https://" + c.goatcounter + ".goatcounter.com/count");
+    document.head.appendChild(gc);
+  }
+  $("apk").addEventListener("click", function (e) { openDl(e); track("download-popup", "Download pop-up opened"); });
+  $("navdl").addEventListener("click", function (e) { openDl(e); track("download-popup", "Download pop-up opened"); });
   $("dlclose").addEventListener("click", closeDl);
   modal.addEventListener("click", function (e) { if (e.target === modal) closeDl(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDl(); });
   $("dlapk").addEventListener("click", function () {
     $("dlmeta").textContent = "Download started. Thank you for trying BackDisplay!";
+    track("download-apk", "APK downloaded (v" + (c.version || "") + ")");
+  });
+  // Support: which way people choose (card, Patreon…) and copied details (which card, not the value).
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("#ways a, #dlways a");
+    if (a && a.href) { try { track("support-" + new URL(a.href).hostname, "Support link: " + a.textContent.trim()); } catch (x) {} }
+    var b = e.target.getAttribute && e.target.getAttribute("data-copy") && e.target.closest(".card");
+    if (b) { var h = b.querySelector("h3"); track("support-copy", "Copied: " + (h ? h.textContent : "")); }
   });
   if (location.hash === "#get") openDl();
 
