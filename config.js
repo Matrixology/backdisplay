@@ -14,7 +14,7 @@ window.REARDECK = {
   privacyUrl: "privacy.html",
   // Visitor counting with GoatCounter (no cookies, no personal data): your code from
   // goatcounter.com, e.g. "backdisplay" for backdisplay.goatcounter.com. "" = no counting.
-  goatcounter: "",
+  goatcounter: "matrixology",
 
   // ---- Support options (each card shows only when it has a value) ----
   binancePayId: "155112876",            // your Binance Pay ID (numbers), from Binance → Pay → Receive
