@@ -24,6 +24,7 @@ window.REARDECK = {
     title: "", iban: "", accountName: "", bankName: "", raastId: "",
   },
   wallets: [                   // JazzCash, Easypaisa, SadaPay, NayaPay …
+    { name: "SadaPay", number: "03292594899", holder: "" },
     { name: "JazzCash", number: "", holder: "" },
     { name: "Easypaisa", number: "", holder: "" },
   ],

@@ -260,7 +260,7 @@ footer .logo{font-size:16px}
   }
   var w = (c.wallets || []).filter(function (x) { return x.number; });
   if (w.length) {
-    card("📲", "Mobile wallets", "JazzCash, Easypaisa and other wallets in Pakistan.",
+    card("📲", "Mobile wallets", "Send from any bank or wallet app in Pakistan.",
       w.map(function (x) { return copyRow(x.name + (x.holder ? " · " + x.holder : ""), x.number); }).join(""));
   }
   if (c.cardUrl || c.membershipUrl) {
