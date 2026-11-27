@@ -17,8 +17,7 @@ window.REARDECK = {
   binancePayId: "155112876",            // your Binance Pay ID (numbers), from Binance → Pay → Receive
   binanceQr: "",               // optional: a QR image you saved from Binance, e.g. "img/binance-qr.png"
   usdt: [                      // crypto addresses; delete the lines you don't use
-    { network: "TRC20 (Tron)", address: "" },
-    { network: "BEP20 (BNB Smart Chain)", address: "" },
+    { network: "TRC20 (Tron)", address: "TPUncxewqSgEJadWsy9XZfW2unThTMM4CN" },
   ],
   bank: {                      // for supporters in Pakistan (IBFT / Raast)
     title: "", iban: "", accountName: "", bankName: "", raastId: "",
@@ -30,6 +29,6 @@ window.REARDECK = {
   ],
   cardUrl: "https://matrixologist.gumroad.com/l/backdisplay", // card payments for anyone, e.g. a Gumroad "pay what you want" link
   cardLabel: "Pay by card",
-  membershipUrl: "",           // e.g. a Patreon page
-  membershipLabel: "Monthly support",
+  membershipUrl: "https://www.patreon.com/c/matrixology1", // e.g. a Patreon page
+  membershipLabel: "Monthly on Patreon",
 };
