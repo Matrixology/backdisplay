@@ -3,12 +3,12 @@
  * Leave a value as "" and its button or card is hidden from the page.
  */
 window.REARDECK = {
-  version: "1.5.2",
+  version: "1.5.3",
   // Where the APK is downloaded from. A GitHub Release link is best (free, no size limit),
   // e.g. "https://github.com/YOURNAME/reardeck/releases/latest/download/RearDeck.apk"
   apkUrl: "https://github.com/Matrixology/backdisplay/releases/latest/download/BackDisplay.apk",
   apkSize: "50 MB",                 // e.g. "28 MB"
-  apkSha256: "238d6643e8920e6cfc24fb4e00e4d770b39af70a8e370f02f246396e78587a7c",               // optional: lets careful users check the file
+  apkSha256: "adb569256fc80f77d9876c4b0590a6c43faa2b43615888a1c1761ed138e25ab8",               // optional: lets careful users check the file
   playUrl: "",
   email: "matrixology@gmail.com",
   privacyUrl: "privacy.html",
