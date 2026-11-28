@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>BackDisplay · control panel</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#15181d; --mute:#646b75; --line:#e3e6eb; --acc:#1f6feb; --warn:#b42318; --ok:#067647; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--ink); }
+  header { display:flex; align-items:center; gap:12px; padding:14px 20px; background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:2; }
+  header h1 { font-size:17px; margin:0; flex:1; }
+  main { max-width:1200px; margin:0 auto; padding:20px; display:grid; gap:20px; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; }
+  h2 { font-size:16px; margin:0 0 12px; display:flex; align-items:center; gap:10px; }
+  h2 .grow { flex:1; }
+  button { font:inherit; border:1px solid var(--line); background:#fff; border-radius:8px; padding:7px 12px; cursor:pointer; }
+  button.primary { background:var(--acc); border-color:var(--acc); color:#fff; }
+  button.danger { color:var(--warn); }
+  button:disabled { opacity:.5; cursor:default; }
+  .stats { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:14px; }
+  .stat { border:1px solid var(--line); border-radius:10px; padding:10px 14px; min-width:130px; }
+  .stat b { display:block; font-size:22px; font-variant-numeric:tabular-nums; }
+  .stat span { color:var(--mute); font-size:13px; }
+  .cols { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-bottom:14px; }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { color:var(--mute); font-weight:600; position:sticky; top:0; background:var(--card); }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .scroll { overflow:auto; max-height:520px; border:1px solid var(--line); border-radius:10px; }
+  .notice { border:1px solid var(--line); border-radius:10px; padding:14px; display:grid; gap:10px; margin-bottom:12px; }
+  .notice.live { border-color:var(--ok); box-shadow:0 0 0 1px var(--ok) inset; }
+  .notice.blocking { border-color:var(--warn); box-shadow:0 0 0 1px var(--warn) inset; }
+  .row { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; }
+  label { display:grid; gap:4px; font-size:13px; color:var(--mute); }
+  input[type=text], textarea, select { font:inherit; color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:7px 9px; width:100%; }
+  textarea { min-height:64px; resize:vertical; }
+  .checks { display:flex; flex-wrap:wrap; gap:18px; align-items:center; }
+  .checks label { display:flex; align-items:center; gap:6px; color:var(--ink); font-size:14px; }
+  .warn { color:var(--warn); font-size:13px; }
+  .muted { color:var(--mute); font-size:13px; }
+  .actions { display:flex; gap:8px; align-items:center; }
+  .actions .grow { flex:1; }
+  #signin { max-width:420px; margin:80px auto; text-align:center; }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BackDisplay · control panel</h1>
+  <span id="who" class="muted"></span>
+  <button id="out" class="hidden">Sign out</button>
+</header>
+
+<section id="signin">
+  <p>Sign in with the owner's Google account to see installs and edit notices.</p>
+  <button id="in" class="primary">Sign in with Google</button>
+  <p id="err" class="warn"></p>
+</section>
+
+<main id="app" class="hidden">
+  <section>
+    <h2><span class="grow">Notices</span><button id="add">+ New notice</button></h2>
+    <p class="muted">Every copy of the app (website and Play) checks for notices when it opens and every 6 hours. The first notice with <b>On</b> ticked that matches the phone is shown. Empty targeting fields mean every phone.</p>
+    <div id="notices"></div>
+  </section>
+
+  <section>
+    <h2><span class="grow">Installs (website build)</span><button id="csv">Download CSV</button><button id="reload">Refresh</button></h2>
+    <div class="stats" id="stats"></div>
+    <div class="cols">
+      <div class="scroll"><table id="byModel"></table></div>
+      <div class="scroll"><table id="byVersion"></table></div>
+    </div>
+    <div class="scroll"><table id="installs"></table></div>
+  </section>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+// Firebase web config of the "backdisplay-panel" project. These are public client ids, not
+// secrets: what each visitor may read or write is decided by the Firestore rules.
+const app = initializeApp({
+  apiKey: "AIzaSyB6ZhEPpdMAq3AAGwloXMcSwLSLdMUV1kk",
+  authDomain: "backdisplay-panel.firebaseapp.com",
+  projectId: "backdisplay-panel",
+  appId: "1:428269681642:web:8e9176edc2ef4ef418d093",
+});
+const auth = getAuth(app);
+const db = getFirestore(app);
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const when = (t) => t?.toDate ? t.toDate().toLocaleString() : "";
+let installs = [];
+
+$("in").onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch((e) => ($("err").textContent = e.message));
+$("out").onclick = () => signOut(auth);
+$("reload").onclick = () => loadInstalls();
+$("add").onclick = () => addNotice();
+$("csv").onclick = () => downloadCsv();
+
+onAuthStateChanged(auth, async (user) => {
+  $("who").textContent = user ? user.email : "";
+  $("out").classList.toggle("hidden", !user);
+  $("signin").classList.toggle("hidden", !!user);
+  $("app").classList.toggle("hidden", !user);
+  if (!user) return;
+  try {
+    await Promise.all([loadNotices(), loadInstalls()]);
+  } catch (e) {
+    $("app").classList.add("hidden");
+    $("signin").classList.remove("hidden");
+    $("err").textContent = "This account can't open the panel (" + e.code + ").";
+  }
+});
+
+// ---------- installs ----------
+async function loadInstalls() {
+  const snap = await getDocs(query(collection(db, "installs"), orderBy("lastSeen", "desc")));
+  installs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const now = Date.now(), day = 86400000;
+  const active = (days) => installs.filter((i) => i.lastSeen?.toMillis && now - i.lastSeen.toMillis() < days * day).length;
+  const newIn = (days) => installs.filter((i) => i.firstSeen?.toMillis && now - i.firstSeen.toMillis() < days * day).length;
+  $("stats").innerHTML = [
+    [installs.length, "installs ever"], [active(1), "active today"], [active(7), "active in 7 days"],
+    [active(30), "active in 30 days"], [newIn(7), "new in 7 days"],
+  ].map(([n, l]) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+  $("byModel").innerHTML = countTable("Phone model", (i) => `${i.maker || ""} ${i.model || "?"}`.trim());
+  $("byVersion").innerHTML = countTable("App version", (i) => i.app || "?");
+  $("installs").innerHTML =
+    `<tr><th>Model</th><th>Maker</th><th>Android</th><th>ROM build</th><th>App</th><th>First seen</th><th>Last seen</th><th class="num">Checks</th><th></th></tr>` +
+    installs.map((i) => `<tr><td>${esc(i.model)}</td><td>${esc(i.maker)}</td><td>${esc(i.android)}</td><td>${esc(i.rom)}</td>
+      <td>${esc(i.app)}</td><td>${when(i.firstSeen)}</td><td>${when(i.lastSeen)}</td><td class="num">${i.checks ?? ""}</td><td><button class="danger" data-del="${esc(i.id)}">Delete</button></td></tr>`).join("");
+  $("installs").querySelectorAll("[data-del]").forEach((b) => (b.onclick = async () => {
+    b.disabled = true;
+    try { await deleteDoc(doc(db, "installs", b.dataset.del)); await loadInstalls(); } catch (e) { b.disabled = false; b.textContent = e.code; }
+  }));
+}
+
+function countTable(title, key) {
+  const m = new Map();
+  installs.forEach((i) => m.set(key(i), (m.get(key(i)) || 0) + 1));
+  const rows = [...m.entries()].sort((a, b) => b[1] - a[1]);
+  return `<tr><th>${title}</th><th class="num">Installs</th></tr>` +
+    rows.map(([k, n]) => `<tr><td>${esc(k)}</td><td class="num">${n}</td></tr>`).join("");
+}
+
+function downloadCsv() {
+  const cols = ["id", "model", "maker", "android", "rom", "app", "build", "firstSeen", "lastSeen", "checks"];
+  const cell = (v) => `"${String(v?.toDate ? v.toDate().toISOString() : v ?? "").replace(/"/g, '""')}"`;
+  const csv = [cols.join(","), ...installs.map((i) => cols.map((c) => cell(i[c])).join(","))].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = `backdisplay-installs-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+}
+
+// ---------- notices ----------
+const FIELDS = ["title", "message", "button", "link", "belowVersion", "build", "model"];
+
+async function loadNotices() {
+  const snap = await getDocs(collection(db, "notices"));
+  $("notices").innerHTML = "";
+  const docs = snap.docs.sort((a, b) => a.id.localeCompare(b.id));
+  if (!docs.length) $("notices").innerHTML = `<p class="muted">No notices yet.</p>`;
+  docs.forEach((d) => $("notices").appendChild(noticeCard(d.id, d.data())));
+}
+
+function addNotice() {
+  const id = "n" + new Date().toISOString().replace(/\D/g, "").slice(0, 14);
+  const card = noticeCard(id, {
+    on: false, block: false, title: "BackDisplay has moved",
+    message: "This version no longer works. Get the new one from Google Play.",
+    button: "Open Play Store", link: "https://play.google.com/store/apps/details?id=com.ezilife.reardeck",
+    belowVersion: "", build: "web", model: "",
+  }, true);
+  const list = $("notices");
+  if (list.querySelector("p")) list.innerHTML = "";
+  list.prepend(card);
+}
+
+function noticeCard(id, d, isNew = false) {
+  const el = document.createElement("div");
+  el.className = "notice";
+  el.innerHTML = `
+    <div class="checks">
+      <label><input type="checkbox" data-k="on"> On (phones show it)</label>
+      <label><input type="checkbox" data-k="block"> Block: full screen, app stops working</label>
+      <span class="muted">#${esc(id)}${d.updated?.toDate ? " · saved " + when(d.updated) : ""}</span>
+    </div>
+    <div class="row">
+      <label>Title<input type="text" data-k="title" maxlength="80"></label>
+      <label>Button text<input type="text" data-k="button" maxlength="40"></label>
+    </div>
+    <label>Message<textarea data-k="message" maxlength="600"></textarea></label>
+    <label>Button link<input type="text" data-k="link" placeholder="https://play.google.com/store/apps/details?id=..."></label>
+    <div class="row">
+      <label>Only app versions below (empty = all)<input type="text" data-k="belowVersion" placeholder="e.g. 1.6.0"></label>
+      <label>Only this build<select data-k="build"><option value="">Website and Play</option><option value="web">Website (BackDisplay)</option><option value="play">Play (Rear Deck)</option></select></label>
+      <label>Only models containing (empty = all)<input type="text" data-k="model" placeholder="e.g. 25113"></label>
+    </div>
+    <div class="actions">
+      <span class="warn hint"></span><span class="grow"></span>
+      <button class="danger" data-act="del">Delete</button>
+      <button class="primary" data-act="save">Save</button>
+    </div>`;
+  const get = (k) => el.querySelector(`[data-k="${k}"]`);
+  get("on").checked = !!d.on; get("block").checked = !!d.block;
+  FIELDS.forEach((k) => (get(k).value = d[k] ?? ""));
+  const refresh = () => {
+    const on = get("on").checked, block = get("block").checked;
+    el.classList.toggle("live", on && !block);
+    el.classList.toggle("blocking", on && block);
+    el.querySelector(".hint").textContent = on && block
+      ? "Saving this stops the app on every matching phone until you untick On or Block." : "";
+  };
+  el.addEventListener("input", refresh);
+  refresh();
+  el.querySelector('[data-act="save"]').onclick = async (ev) => {
+    const b = ev.target; b.disabled = true; b.textContent = "Saving…";
+    const data = { on: get("on").checked, block: get("block").checked, updated: serverTimestamp() };
+    FIELDS.forEach((k) => (data[k] = get(k).value.trim()));
+    try { await setDoc(doc(db, "notices", id), data); b.textContent = "Saved ✓"; isNew = false; }
+    catch (e) { b.textContent = "Save"; alertInline(el, e.message); }
+    setTimeout(() => { b.disabled = false; b.textContent = "Save"; }, 1500);
+  };
+  el.querySelector('[data-act="del"]').onclick = async () => {
+    if (!isNew) {
+      try { await deleteDoc(doc(db, "notices", id)); } catch (e) { return alertInline(el, e.message); }
+    }
+    el.remove();
+  };
+  return el;
+}
+
+function alertInline(el, msg) { el.querySelector(".hint").textContent = msg; }
+</script>
+</body>
+</html>
